@@ -7,20 +7,21 @@ export const maxDuration = 30;
 export async function POST(req: Request) {
   const { messages } = await req.json();
 
-  const sseClient = await experimental_createMCPClient({
+  // mcp servers
+  const sseClientClock = await experimental_createMCPClient({
     transport: {
       type: "sse",
       url: "http://localhost:5027",
     },
   });
-  const tools = await sseClient.tools();
+  const tools = await sseClientClock.tools();
 
   const result = streamText({
     model: anthropic("claude-3-5-haiku-latest"),
     tools,
     messages,
     onFinish: async () => {
-      await sseClient.close();
+      await sseClientClock.close();
       console.log("Stream closed successfully.");
     },
   });
