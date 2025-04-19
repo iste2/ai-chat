@@ -39,7 +39,7 @@ type MessageInputProps =
   | MessageInputWithAttachmentsProps
 
 export function MessageInput({
-  placeholder = "Ask AI...",
+  placeholder = "How can I help you today?",
   className,
   onKeyDown: onKeyDownProp,
   submitOnEnter = true,
@@ -52,6 +52,34 @@ export function MessageInput({
   const [isDragging, setIsDragging] = useState(false)
   const [showInterruptPrompt, setShowInterruptPrompt] = useState(false)
   const [showMCPStatusModal, setShowMCPStatusModal] = useState(false)
+  const [activeToolsCount, setActiveToolsCount] = useState<number>(0)
+
+  // Fetch MCP status to get active tools count
+  useEffect(() => {
+    async function fetchActiveToolsCount() {
+      try {
+        const response = await fetch('/api/mcp-status');
+        if (response.ok) {
+          const data = await response.json();
+          // Calculate total active tools across all active servers
+          const count = data.servers
+            .filter(server => server.status === 'active')
+            .reduce((total, server) => 
+              total + (server.tools ? Object.keys(server.tools).length : 0), 0);
+          setActiveToolsCount(count);
+        }
+      } catch (error) {
+        console.error('Error fetching active tools count:', error);
+      }
+    }
+
+    fetchActiveToolsCount();
+    
+    // Set up an interval to refresh the count periodically
+    const interval = setInterval(fetchActiveToolsCount, 30000); // every 30 seconds
+    
+    return () => clearInterval(interval);
+  }, []);
 
   const {
     isListening,
@@ -255,13 +283,18 @@ export function MessageInput({
       <div className="absolute right-3 top-3 z-20 flex gap-2">
         <Button
           type="button"
-          size="icon"
           variant="outline"
-          className="h-8 w-8"
+          className={cn(
+            "h-8 flex items-center gap-1.5 px-2",
+            activeToolsCount > 0 ? "min-w-[2.5rem]" : "w-8"
+          )}
           aria-label="View available tools"
           onClick={() => setShowMCPStatusModal(true)}
         >
           <Wrench className="h-4 w-4" />
+          {activeToolsCount > 0 && (
+            <span className="text-xs font-medium">{activeToolsCount}</span>
+          )}
         </Button>
         
         {props.allowAttachments && (
