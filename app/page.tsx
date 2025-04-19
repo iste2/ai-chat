@@ -44,6 +44,13 @@ export default function Chat() {
                 switch (part.type) {
                   case 'text':
                     return <div key={`${message.id}-${i}`} className='text-sm'>{part.text}</div>;
+                  case 'tool-invocation':
+                    switch (part.toolInvocation.state) {
+                      case 'result':
+                        return <div key={`${message.id}-${i}`} className='text-sm'>Result from {part.toolInvocation.toolName}: {part.toolInvocation.result.content[0].text}</div>;
+                    }
+                  default:
+                    console.log('Unknown part type:', part);
                 }
               })}
             </div>
