@@ -352,20 +352,7 @@ function ToolCall({
                 key={index}
                 className="flex flex-col gap-1.5 rounded-lg border bg-muted/50 px-3 py-2 text-sm"
               >
-                <div className="flex items-center gap-2 text-muted-foreground">
-                  <Code2 className="h-4 w-4" />
-                  <span>
-                    Result from{" "}
-                    <span className="font-mono">
-                      {"`"}
-                      {invocation.toolName}
-                      {"`"}
-                    </span>
-                  </span>
-                </div>
-                <pre className="overflow-x-auto whitespace-pre-wrap text-foreground">
-                  {JSON.stringify(invocation.result, null, 2)}
-                </pre>
+                <ExpandableToolResult invocation={invocation} />
               </div>
             )
           default:
@@ -373,5 +360,53 @@ function ToolCall({
         }
       })}
     </div>
+  )
+}
+
+interface ExpandableToolResultProps {
+  invocation: ToolResult
+}
+
+function ExpandableToolResult({ invocation }: ExpandableToolResultProps) {
+  const [isOpen, setIsOpen] = useState(false)
+
+  return (
+    <Collapsible open={isOpen} onOpenChange={setIsOpen} className="w-full">
+      <CollapsibleTrigger className="flex w-full items-center justify-between">
+        <div className="flex items-center gap-2 text-muted-foreground">
+          <Code2 className="h-4 w-4" />
+          <span>
+            Result from{" "}
+            <span className="font-mono">
+              {"`"}
+              {invocation.toolName}
+              {"`"}
+            </span>
+          </span>
+        </div>
+        <ChevronRight
+          className={cn(
+            "h-4 w-4 text-muted-foreground transition-transform",
+            isOpen && "rotate-90"
+          )}
+        />
+      </CollapsibleTrigger>
+      <CollapsibleContent>
+        <motion.div
+          initial={false}
+          animate={isOpen ? "open" : "closed"}
+          variants={{
+            open: { height: "auto", opacity: 1 },
+            closed: { height: 0, opacity: 0 },
+          }}
+          transition={{ duration: 0.3, ease: [0.04, 0.62, 0.23, 0.98] }}
+          className="overflow-hidden"
+        >
+          <pre className="mt-2 overflow-x-auto whitespace-pre-wrap text-foreground">
+            {JSON.stringify(invocation.result, null, 2)}
+          </pre>
+        </motion.div>
+      </CollapsibleContent>
+    </Collapsible>
   )
 }
