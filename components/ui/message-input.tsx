@@ -2,7 +2,7 @@
 
 import React, { useEffect, useRef, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
-import { ArrowUp, Info, Loader2, Mic, Paperclip, Square, X } from "lucide-react"
+import { ArrowUp, Info, Loader2, Mic, Paperclip, Square, Wrench, X } from "lucide-react"
 import { omit } from "remeda"
 
 import { cn } from "@/lib/utils"
@@ -12,6 +12,7 @@ import { AudioVisualizer } from "@/components/ui/audio-visualizer"
 import { Button } from "@/components/ui/button"
 import { FilePreview } from "@/components/ui/file-preview"
 import { InterruptPrompt } from "@/components/ui/interrupt-prompt"
+import { MCPServerStatusModal } from "@/components/ui/mcp-server-status"
 
 interface MessageInputBaseProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -50,6 +51,7 @@ export function MessageInput({
 }: MessageInputProps) {
   const [isDragging, setIsDragging] = useState(false)
   const [showInterruptPrompt, setShowInterruptPrompt] = useState(false)
+  const [showMCPStatusModal, setShowMCPStatusModal] = useState(false)
 
   const {
     isListening,
@@ -197,6 +199,11 @@ export function MessageInput({
         onStopRecording={stopRecording}
       />
 
+      <MCPServerStatusModal 
+        isOpen={showMCPStatusModal} 
+        onClose={() => setShowMCPStatusModal(false)} 
+      />
+
       <div className="relative flex w-full items-center space-x-2">
         <div className="relative flex-1">
           <textarea
@@ -246,6 +253,17 @@ export function MessageInput({
       </div>
 
       <div className="absolute right-3 top-3 z-20 flex gap-2">
+        <Button
+          type="button"
+          size="icon"
+          variant="outline"
+          className="h-8 w-8"
+          aria-label="View available tools"
+          onClick={() => setShowMCPStatusModal(true)}
+        >
+          <Wrench className="h-4 w-4" />
+        </Button>
+        
         {props.allowAttachments && (
           <Button
             type="button"
