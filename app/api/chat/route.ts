@@ -24,6 +24,7 @@ export async function POST(req: Request) {
       await sseClientClock.close();
       console.log("Stream closed successfully.");
     },
+    maxSteps: 5,
   });
 
   return result.toDataStreamResponse();

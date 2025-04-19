@@ -12,18 +12,18 @@ import { ArrowDown, ThumbsDown, ThumbsUp } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useAutoScroll } from "@/hooks/use-auto-scroll"
 import { Button } from "@/components/ui/button"
-import { type Message } from "@/components/ui/chat-message"
 import { CopyButton } from "@/components/ui/copy-button"
 import { MessageInput } from "@/components/ui/message-input"
 import { MessageList } from "@/components/ui/message-list"
 import { PromptSuggestions } from "@/components/ui/prompt-suggestions"
+import { UIMessage } from "ai"
 
 interface ChatPropsBase {
   handleSubmit: (
     event?: { preventDefault?: () => void },
     options?: { experimental_attachments?: FileList }
   ) => void
-  messages: Array<Message>
+  messages: Array<UIMessage>
   input: string
   className?: string
   handleInputChange: React.ChangeEventHandler<HTMLTextAreaElement>
@@ -155,7 +155,7 @@ export function Chat({
   }, [stop, setMessages, messagesRef])
 
   const messageOptions = useCallback(
-    (message: Message) => ({
+    (message: UIMessage) => ({
       actions: onRateResponse ? (
         <>
           <div className="border-r pr-1">
@@ -238,7 +238,7 @@ export function ChatMessages({
   messages,
   children,
 }: React.PropsWithChildren<{
-  messages: Message[]
+  messages: UIMessage[]
 }>) {
   const {
     containerRef,

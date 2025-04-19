@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/collapsible"
 import { FilePreview } from "@/components/ui/file-preview"
 import { MarkdownRenderer } from "@/components/ui/markdown-renderer"
+import { UIMessage } from "ai"
 
 const chatBubbleVariants = cva(
   "group/message relative break-words rounded-lg p-3 text-sm sm:max-w-[70%]",
@@ -105,17 +106,7 @@ interface SourcePart {
 
 type MessagePart = TextPart | ReasoningPart | ToolInvocationPart | SourcePart
 
-export interface Message {
-  id: string
-  role: "user" | "assistant" | (string & {})
-  content: string
-  createdAt?: Date
-  experimental_attachments?: Attachment[]
-  toolInvocations?: ToolInvocation[]
-  parts?: MessagePart[]
-}
-
-export interface ChatMessageProps extends Message {
+export interface ChatMessageProps extends UIMessage {
   showTimeStamp?: boolean
   animation?: Animation
   actions?: React.ReactNode

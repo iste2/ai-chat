@@ -216,7 +216,7 @@ export function MessageInput({
           />
 
           {props.allowAttachments && (
-            <div className="absolute inset-x-3 bottom-0 z-20 overflow-x-scroll py-3">
+            <div className="absolute bottom-0 z-20 overflow-x-scroll py-3">
               <div className="flex space-x-3">
                 <AnimatePresence mode="popLayout">
                   {props.files?.map((file) => {
@@ -297,7 +297,7 @@ export function MessageInput({
       </div>
 
       {props.allowAttachments && <FileUploadOverlay isDragging={isDragging} />}
-
+      
       <RecordingControls
         isRecording={isRecording}
         isTranscribing={isTranscribing}
@@ -305,6 +305,7 @@ export function MessageInput({
         textAreaHeight={textAreaHeight}
         onStopRecording={stopRecording}
       />
+      
     </div>
   )
 }
