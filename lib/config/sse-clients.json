@@ -1,0 +1,10 @@
+{
+  "clients": [
+    {
+      "id": "Clock",
+      "name": "Clock",
+      "url": "http://localhost:5027",
+      "description": "Get the current date and time."
+    }
+  ]
+}
