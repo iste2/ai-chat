@@ -14,10 +14,8 @@ export interface MCPTool {
  * Represents the status of an MCP server
  */
 export interface MCPServerStatus {
-  id: string;
   name: string;
   url: string;
-  description: string;
   status: "active" | "error";
   error?: string;
   tools?: Record<string, MCPTool>; // Tools will be available if status is active

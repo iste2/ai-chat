@@ -81,7 +81,7 @@ export function MCPServerStatusModal({ isOpen, onClose }: MCPServerStatusModalPr
           ) : (
             <div className="space-y-4">
               {servers.map((server) => (
-                <ServerStatusCard key={server.id} server={server} />
+                <ServerStatusCard key={server.name} server={server} />
               ))}
             </div>
           )}
@@ -110,7 +110,7 @@ function ServerStatusCard({ server }: { server: MCPServerStatus }) {
           )}
           <div>
             <h3 className="font-medium">{server.name}</h3>
-            <p className="text-sm text-muted-foreground">{server.description}</p>
+            <p className="text-sm text-muted-foreground">{server.url}</p>
           </div>
         </div>
         <div className="text-sm">

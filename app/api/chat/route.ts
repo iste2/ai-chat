@@ -27,8 +27,8 @@ export async function POST(req: Request) {
           },
         });
 
-        // Store the client connection for later cleanup
-        activeSseClients.set(client.id, clientClock);
+        // Store the client connection for later cleanup using name as key
+        activeSseClients.set(client.name, clientClock);
 
         // Get tools from this client and add to combined tools
         const clientTools = await clientClock.tools();
@@ -54,12 +54,12 @@ export async function POST(req: Request) {
     messages,
     onFinish: async () => {
       // Close all client connections
-      for (const [clientId, clientClock] of activeSseClients.entries()) {
+      for (const [clientName, clientClock] of activeSseClients.entries()) {
         try {
           await clientClock.close();
-          console.log(`Stream closed successfully for client ${clientId}`);
+          console.log(`Stream closed successfully for client ${clientName}`);
         } catch (closeError) {
-          console.error(`Error closing MCP client ${clientId}:`, closeError);
+          console.error(`Error closing MCP client ${clientName}:`, closeError);
         }
       }
     },

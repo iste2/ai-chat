@@ -2,10 +2,8 @@ import fs from "fs";
 import path from "path";
 
 export interface SSEClient {
-  id: string;
   name: string;
   url: string;
-  description: string;
 }
 
 export interface SSEClientConfig {
@@ -32,19 +30,19 @@ export function getSSEClientConfig(): SSEClientConfig | undefined {
 }
 
 /**
- * Gets a specific SSE client by ID
- * @param clientId The ID of the client to retrieve
- * @returns The SSE client with the specified ID or undefined if not found
- * @throws Error when clientId is not provided and no clients are available
+ * Gets a specific SSE client by name
+ * @param clientName The name of the client to retrieve
+ * @returns The SSE client with the specified name or undefined if not found
+ * @throws Error when clientName is not provided and no clients are available
  */
-export function getSSEClientById(clientId: string): SSEClient | undefined {
+export function getSSEClientByName(clientName: string): SSEClient | undefined {
   const config = getSSEClientConfig();
 
-  if (!clientId) {
-    throw new Error("Client ID must be provided");
+  if (!clientName) {
+    throw new Error("Client name must be provided");
   }
 
-  return config?.clients.find((client) => client.id === clientId);
+  return config?.clients.find((client) => client.name === clientName);
 }
 
 /**
